@@ -16,10 +16,10 @@ p {
     /* width: 180px; */
 }
 
-.container {
+.container-xy {
     display: flex;
     flex-direction: column;
-    margin: 20px;
+    margin: 25px;
 }
 
 .card {

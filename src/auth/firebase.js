@@ -5,7 +5,6 @@ import {
   signInWithPopup,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  sendPasswordResetEmail,
   signOut,
 } from "firebase/auth";
 import {
@@ -17,12 +16,12 @@ import {
   addDoc,
 } from "firebase/firestore";
 const firebaseConfig = {
-  apiKey: "AIzaSyDIF9s_OiegNFYGUXI3nyFCBq4yd3ZriUE",
-  authDomain: "movie-db-5616c.firebaseapp.com",
-  projectId: "movie-db-5616c",
-  storageBucket: "movie-db-5616c.appspot.com",
-  messagingSenderId: "926563285018",
-  appId: "1:926563285018:web:edd1e238810be9feeab9a3",
+  apiKey: "AIzaSyBCpC01AUeeW8u8Ce_fLs_mo6EjrHpz9xA",
+  authDomain: "moviedb-ba4b3.firebaseapp.com",
+  projectId: "moviedb-ba4b3",
+  storageBucket: "moviedb-ba4b3.appspot.com",
+  messagingSenderId: "736844379274",
+  appId: "1:736844379274:web:d8de7de4a8c80f86232973"
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -70,15 +69,7 @@ const registerWithEmailAndPassword = async (name, email, password) => {
     alert(err.message);
   }
 };
-const sendPasswordReset = async (email) => {
-  try {
-    await sendPasswordResetEmail(auth, email);
-    alert("Password reset link sent!");
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
+
 const logout = () => {
   signOut(auth);
 };
@@ -88,6 +79,5 @@ export {
   signInWithGoogle,
   logInWithEmailAndPassword,
   registerWithEmailAndPassword,
-  sendPasswordReset,
   logout,
 };
