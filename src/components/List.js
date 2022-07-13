@@ -8,21 +8,14 @@ const baseURL = "https://image.tmdb.org/t/p/original/";
 const List = ({ movie, date }) => {
   const [movieDetails, setMoviesDetails] = useState({});
   const imdbId = movie.imdbID;
-  console.log(imdbId);
   useEffect(() => {
     async function fetchData() {
       const res = axios
         .get(`https://www.omdbapi.com/?apikey=28fd471d&i=${imdbId}`)
         .then((res) => setMoviesDetails(res.data));
-      //   console.log(`https://www.omdbapi.com/?apikey=28fd471d&i=${imdbId}`);
-
-      //   console.log(res);
-      // console.log(imdbId)
-      //   console.log(res);
     }
     fetchData();
   }, [imdbId]);
-  console.log(movieDetails);
   return (
       <div className="container"> 
     <div className="card">
