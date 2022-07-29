@@ -25,10 +25,10 @@ export class Navbar extends Component {
                      <li className="nav-item"><Link className="nav-link" to="/Adventure">Adventure</Link></li>
                      <li className="nav-item"><Link className="nav-link" to="/Romance">Romance</Link></li>
                      <li className="nav-item"><Link className="nav-link" to="/si-fi">Science-fiction</Link></li>
-                     <li className="nav-item"><Link className="nav-link" to="/Adult">Adult</Link></li>
 
                 
               </ul>
+                     <li className="btn btn-outline-info mx-2 "><Link className="nav-link" to="/mylist">My-List</Link></li>
                      <button className='btn btn-outline-warning mx-2' onClick={logout}>Logout</button>
               </div>
           </div>

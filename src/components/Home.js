@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "../axios";
 import List from "./List";
-import {  auth } from "../auth/firebase";
-import {  useNavigate } from "react-router-dom";
+import {  auth, addMovieWatchlist } from "../auth/firebase";
+import { useNavigate } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
+import NoResult from "../ui/NoResult";
 
 const Home = () => {
   const [movies, setMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [user, loading] = useAuthState(auth);
+  const [timeoutId, updateTimeoutId] = useState();
+
   const navigate = useNavigate();
 
   useEffect(() => {
     if (loading) return;
     if (!user) return navigate("/");
-  }, [user, loading]);
+  }, [user, loading, navigate]);
 
   useEffect(() => {
     async function fetchData() {
-      console.log(searchTerm.length + "======");
+      // console.log(searchTerm.length + "======");
       const res = await axios.get(searchTerm);
       const data = res.data.Search;
 
@@ -34,7 +37,6 @@ const Home = () => {
   function onSearch(e) {
     e.preventDefault();
     const search = e.target.value;
-    console.log(search);
     if (search.length === 0 || searchTerm.length === 0) {
       setMovies([]);
       setSearchTerm("");
@@ -44,9 +46,15 @@ const Home = () => {
       setSearchTerm("");
       return;
     }
-
-    setSearchTerm(search);
+    clearTimeout(timeoutId);
+    const timeout = setTimeout(() => setSearchTerm(search), 500);
+    updateTimeoutId(timeout);
   }
+
+  const onMyListClick = (e) => {
+    e.preventDefault();
+    navigate("/mylist");
+  };
   return (
       <div className="container my-3">
                  <h1 className="text-center text-white" >Search your movie here!</h1>
@@ -58,9 +66,22 @@ const Home = () => {
                      <input onChange={onSearch} className="form-control me-2 "  type="search" placeholder="Search" aria-label="Search" />
                  </form>
                    </div>
-     {movies.map((movie) => {
-        return <List movie={movie} />;
-      })}
+                   {movies.length === 0 ? (
+        <NoResult class="no-results" />
+      ) : (
+        <div>
+          {movies.map((movie) => {
+            return (
+              <List
+                key={movie.imdbID}
+                movie={movie}
+                buttonTitle="Add to List"
+				onClick={() => addMovieWatchlist(movie)}
+              />
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };

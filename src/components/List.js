@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from "react";
 import "./List.css";
-// import axios from "../searchById";
 import axios from "axios";
+import { addMovieWatchlist, deleteMovieWatchlist } from "../auth/firebase";
+import Button from "../ui/Button";
 
-const baseURL = "https://image.tmdb.org/t/p/original/";
-
-const List = ({ movie, date }) => {
+const List = ({ movie, buttonTitle, onClick }) => {
   const [movieDetails, setMoviesDetails] = useState({});
   const imdbId = movie.imdbID;
+  // console.log(imdbId);
   useEffect(() => {
     async function fetchData() {
-      const res = axios
+      axios
         .get(`https://www.omdbapi.com/?apikey=28fd471d&i=${imdbId}`)
         .then((res) => setMoviesDetails(res.data));
     }
     fetchData();
   }, [imdbId]);
+  // console.log(movieDetails);
+    // addMovieWatchlist(movieDetails);
   return (
-      <div className="container"> 
     <div className="card">
       <div className="list">
         <img
@@ -26,12 +27,12 @@ const List = ({ movie, date }) => {
           onError={(e) => {
             e.currentTarget.onerror = null;
             e.currentTarget.src =
-            "https://ih1.redbubble.net/image.512138487.5983/fposter,small,wall_texture,product,750x1000.u3.jpg";
+              "https://ih1.redbubble.net/image.512138487.5983/fposter,small,wall_texture,product,750x1000.u3.jpg";
           }}
           alt={movieDetails.Title}
         />
       </div>
-      <div className="container-xy" key={imdbId}>
+      <div className="container" key={imdbId}>
         <div className="info_list">
           <h2>{movie.Title}</h2>
           <p>
@@ -47,10 +48,15 @@ const List = ({ movie, date }) => {
           <p>Director: {movieDetails.Director}</p>
           <p>Actors: {movieDetails.Actors}</p>
           <p>Plot: {movieDetails.Plot}</p>
+          <Button
+            onClick={onClick}
+            className="add-button"
+          >
+            {buttonTitle}
+          </Button>
         </div>
       </div>
     </div>
-</div>
   );
 };
 

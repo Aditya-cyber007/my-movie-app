@@ -11,6 +11,7 @@ import {
   getFirestore,
   query,
   getDocs,
+  deleteDoc,
   collection,
   where,
   addDoc,
@@ -70,14 +71,85 @@ const registerWithEmailAndPassword = async (name, email, password) => {
   }
 };
 
+const addMovieWatchlist = async (movie) => {
+  try {
+    const user = getAuth(app).currentUser;
+    if (!user) return;
+
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+
+    const docs = await getDocs(q);
+    const docId = docs.docs[0].ref.id;
+    const watchlistRef = collection(db, "users/" + docId + "/watchlist");
+    const watchlistDoc = await getDocs(watchlistRef);
+
+    if (
+      watchlistDoc.docs.filter((doc) => doc.data().imdbID === movie.imdbID)
+        .length > 0
+    ) {
+      alert("Movie already in watchlist");
+      return;
+    }
+
+    // console.log(docs2.docs[0].data().watchlist);
+
+    await addDoc(collection(docs.docs[0].ref, "watchlist"), {
+      ...movie,
+    });
+    alert("Movie added to watchlist");
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
+
+const getMovieWatchList = async (uid) => {
+  try {
+    const q = query(collection(db, "users"), where("uid", "==", uid));
+
+    const docs = await getDocs(q);
+    const docId = docs.docs[0].ref.id;
+    const watchlistRef = collection(db, "users/" + docId + "/watchlist");
+    const watchlistDoc = await getDocs(watchlistRef);
+
+    const data = watchlistDoc.docs.map((e) => e.data());
+    return data;
+  } catch (error) {
+    alert(error);
+  }
+};
+
+const deleteMovieWatchlist = async (movie) => {
+  try {
+    const user = getAuth(app).currentUser;
+    if (!user) return;
+
+    const q = query(collection(db, "users"), where("uid", "==", user.uid));
+
+    const docs = await getDocs(q);
+    const docId = docs.docs[0].ref.id;
+    const watchlistRef = query(
+      collection(db, "users/" + docId + "/watchlist"),
+      where("imdbID", "==", movie.imdbID)
+    );
+    const watchlistDoc = await getDocs(watchlistRef);
+
+    await deleteDoc(watchlistDoc.docs[0].ref);
+  } catch (error) {}
+};
+
 const logout = () => {
   signOut(auth);
 };
 export {
   auth,
   db,
+  app,
   signInWithGoogle,
   logInWithEmailAndPassword,
+  addMovieWatchlist,
+  getMovieWatchList,
   registerWithEmailAndPassword,
+  deleteMovieWatchlist,
   logout,
 };

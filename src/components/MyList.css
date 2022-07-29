@@ -1,0 +1,43 @@
+.list h2 {
+    /* width: 50%; */
+    align-self: center;
+    /* text-align: center; */
+    margin-left: 2rem;
+}
+
+p {
+    color: white;
+}
+
+.list_img {
+    height: 40vh;
+    object-fit: cover;
+    width: 260px;
+    /* width: 180px; */
+}
+
+.container-xy {
+    display: flex;
+    flex-direction: column;
+    margin: 25px;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(12, 9, 9);
+    box-shadow: 4px 4px 3px black;
+    margin: 20px;
+    color: white;
+    padding: 20px;
+    align-items: center;
+    border-radius: 18px;
+    border: 1px solid rgb(85, 82, 82);
+}
+
+.info_list {
+    align-self: center;
+    justify-self: center;
+    align-content: center;
+    margin-left: 13px;
+}
